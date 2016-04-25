@@ -66,6 +66,8 @@ public class TestMaBooty {
     Assert.assertFalse(app.isRunning());
   }
   
+  
+  
   @Test
   public void rollbackTest(){
     TrivialLifecycle lc = new TrivialLifecycle();
