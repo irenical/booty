@@ -23,7 +23,7 @@ public static void main(String[] args) {
   
   BootyConfig config = new BootyConfig();
   config.setLifecycleSupplier(()->Arrays.asList(loggingConfiguration,httpServer,dao));
-  Booty.boot(config);
+  Booty.build(config).start();
 }
 
 ```

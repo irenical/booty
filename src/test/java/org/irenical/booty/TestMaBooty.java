@@ -13,26 +13,27 @@ public class TestMaBooty {
   
   @Test(expected=InvalidConfigurationException.class)
   public void nullConfigTest(){
-    Booty.boot(null);
+    Booty.build(null);
   }
   
   @Test(expected=InvalidConfigurationException.class)
   public void nullSupplierTest(){
-    Booty.boot(new BootyConfig());
+    Booty.build(new BootyConfig());
   }
   
   @Test(expected=InvalidConfigurationException.class)
   public void emptySupplierTest(){
     BootyConfig config = new BootyConfig();
     config.setLifecycleSupplier(()->Collections.emptyList());
-    Booty.boot(config);
+    Booty.build(config).start();
   }
   
   @Test
   public void trivialTest(){
     BootyConfig config = new BootyConfig();
     config.setLifecycleSupplier(()->Collections.singletonList(new TrivialLifecycle()));
-    LifeCycle app = Booty.boot(config);
+    LifeCycle app = Booty.build(config);
+    app.start();
     Assert.assertTrue(app.isRunning());
   }
   
@@ -45,7 +46,8 @@ public class TestMaBooty {
       createdLifecycles.add(lc);
       return Collections.singletonList(lc);
     });
-    LifeCycle app = Booty.boot(config);
+    LifeCycle app = Booty.build(config);
+    app.start();
     Assert.assertEquals(createdLifecycles.size(), 1);
     Assert.assertTrue(app.isRunning());
   }
@@ -54,7 +56,8 @@ public class TestMaBooty {
   public void slowLifecycleTest(){
     BootyConfig config = new BootyConfig();
     config.setLifecycleSupplier(()->Collections.singletonList(new SlowLifecycle()));
-    LifeCycle app = Booty.boot(config);
+    LifeCycle app = Booty.build(config);
+    app.start();
     Assert.assertTrue(app.isRunning());
   }
   
@@ -62,18 +65,18 @@ public class TestMaBooty {
   public void brokenLifecycleTest(){
     BootyConfig config = new BootyConfig();
     config.setLifecycleSupplier(()->Collections.singletonList(new BrokenLifecycle()));
-    LifeCycle app = Booty.boot(config);
+    LifeCycle app = Booty.build(config);
+    app.start();
     Assert.assertFalse(app.isRunning());
   }
-  
-  
   
   @Test
   public void rollbackTest(){
     TrivialLifecycle lc = new TrivialLifecycle();
     BootyConfig config = new BootyConfig();
     config.setLifecycleSupplier(()->Arrays.asList(lc, new BrokenLifecycle()));
-    LifeCycle app = Booty.boot(config);
+    LifeCycle app = Booty.build(config);
+    app.start();
     Assert.assertFalse(app.isRunning());
     Assert.assertFalse(lc.isRunning());
   }

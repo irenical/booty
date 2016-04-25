@@ -7,46 +7,55 @@ import org.irenical.lifecycle.LifeCycle;
 import org.irenical.lifecycle.builder.CompositeLifeCycle;
 import org.slf4j.LoggerFactory;
 
-public class Booty {
+public class Booty extends CompositeLifeCycle {
+  
+  private BootyConfig config;
+
+  private Booty() {
+  }
 
   /**
-   * Bootstraps application and given configs. If an error occurs during
-   * bootstrap, the Exception will be logged, the lifecycles stopped in the
-   * reversed order and the onError consumer is called. This method blocks the
-   * current thread until all lifecycle's start() methods are called.
+   * Creates an application ready to start with given configs. If an error
+   * occurs during bootstrap, the Exception will be logged, the lifecycles
+   * stopped in the reversed order and the onError consumer is called. The
+   * returned instance's start() method blocks the current thread until all
+   * lifecycle's start() methods are called.
    * 
    * @param bootyConfig
    *          the application bootstrap configuration
    * @return a running composite lifecycle, grouping all lifecycles that make up
    *         the application
    */
-  public static LifeCycle boot(BootyConfig bootyConfig) {
+  public static LifeCycle build(BootyConfig bootyConfig) {
     assertConfig(bootyConfig);
     List<LifeCycle> lifecycles = bootyConfig.getLifecycleSupplier().get();
     if (lifecycles == null || lifecycles.isEmpty()) {
       throw new InvalidConfigurationException("No lifecycle was supplied");
     }
-    CompositeLifeCycle baseLifecyle = new CompositeLifeCycle();
+    Booty booty = new Booty();
+    booty.config=bootyConfig;
+    lifecycles.forEach(booty::append);
+    if (bootyConfig.isShutdownHook()) {
+      booty.withShutdownHook();
+    }
+    return booty;
+  }
+
+  @Override
+  public synchronized <ERROR extends Exception> void start() throws ERROR {
     try {
-      lifecycles.forEach(baseLifecyle::append);
-
-      if (bootyConfig.isShutdownHook()) {
-        baseLifecyle.withShutdownHook();
-      }
-      baseLifecyle.start();
-
+      super.start();
     } catch (Exception e) {
       try {
-        baseLifecyle.stop();
+        stop();
       } catch (Exception stopE) {
         LoggerFactory.getLogger(Booty.class).error("Error reverting bootstrap... ignoring.", stopE);
       }
-      Consumer<Exception> onError = bootyConfig.getOnError();
+      Consumer<Exception> onError = config.getOnError();
       if (onError != null) {
         onError.accept(e);
       }
     }
-    return baseLifecyle;
   }
 
   private static void assertConfig(BootyConfig got) {
