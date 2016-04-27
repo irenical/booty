@@ -7,7 +7,7 @@ Booty leverages on the [LifeCycle](https://github.com/irenical/lifecycle) interf
 
 A common application is made up of several modules, each either developed by you, your teammate, an open community, some big coorporation, etc... These modules are things like logging, database access, TPC listening and also etc...
 
-Although you can make a Java application as a monolithic block on top of the JRE, this is seldom the case. You can use Booty to help you with the handling of all the modules in your application, still keeping them seperated.
+Although you can make a Java application as a monolithic block on top of the JREs, this is seldom the case. You can use Booty to help you with the handling of all the modules in your application, still keeping them separated.
 
 ## Prerequisites
 
