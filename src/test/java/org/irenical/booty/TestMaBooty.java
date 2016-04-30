@@ -22,7 +22,14 @@ public class TestMaBooty {
   }
   
   @Test(expected=InvalidConfigurationException.class)
-  public void emptySupplierTest(){
+  public void emptyNullLifeCyclesTest(){
+    BootyConfig config = new BootyConfig();
+    config.setLifecycleSupplier(()->null);
+    Booty.build(config).start();
+  }
+  
+  @Test(expected=InvalidConfigurationException.class)
+  public void emptyLifeCyclesTest(){
     BootyConfig config = new BootyConfig();
     config.setLifecycleSupplier(()->Collections.emptyList());
     Booty.build(config).start();
@@ -77,6 +84,18 @@ public class TestMaBooty {
   @Test
   public void brokenLifecycleTest(){
     BootyConfig config = new BootyConfig();
+    LifeCycle lc = new BrokenLifecycle();
+    config.setLifecycleSupplier(()->Collections.singletonList(lc));
+    LifeCycle app = Booty.build(config);
+    app.start();
+    Assert.assertFalse(lc.isRunning());
+    Assert.assertFalse(app.isRunning());
+  }
+  
+  @Test
+  public void errorHandleTest(){
+    BootyConfig config = new BootyConfig();
+    config.setOnError(e->Assert.assertEquals(e.getMessage(), "I blew up"));
     LifeCycle lc = new BrokenLifecycle();
     config.setLifecycleSupplier(()->Collections.singletonList(lc));
     LifeCycle app = Booty.build(config);
