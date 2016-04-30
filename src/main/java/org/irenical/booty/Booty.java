@@ -8,7 +8,7 @@ import org.irenical.lifecycle.builder.CompositeLifeCycle;
 import org.slf4j.LoggerFactory;
 
 public class Booty extends CompositeLifeCycle {
-  
+
   private BootyConfig config;
 
   private Booty() {
@@ -33,7 +33,7 @@ public class Booty extends CompositeLifeCycle {
       throw new InvalidConfigurationException("No lifecycle was supplied");
     }
     Booty booty = new Booty();
-    booty.config=bootyConfig;
+    booty.config = bootyConfig;
     lifecycles.forEach(booty::append);
     if (bootyConfig.isShutdownHook()) {
       booty.withShutdownHook();
@@ -46,11 +46,7 @@ public class Booty extends CompositeLifeCycle {
     try {
       super.start();
     } catch (Exception e) {
-      try {
-        stop();
-      } catch (Exception stopE) {
-        LoggerFactory.getLogger(Booty.class).error("Error reverting bootstrap... ignoring.", stopE);
-      }
+      super.stop();
       Consumer<Exception> onError = config.getOnError();
       if (onError != null) {
         onError.accept(e);

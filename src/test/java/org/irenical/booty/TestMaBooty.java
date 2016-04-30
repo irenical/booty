@@ -38,6 +38,17 @@ public class TestMaBooty {
   }
   
   @Test
+  public void shutdownHook(){
+    BootyConfig config = new BootyConfig();
+    config.setShutdownHook(false);
+    config.setLifecycleSupplier(()->Collections.singletonList(new TrivialLifecycle()));
+    LifeCycle app = Booty.build(config);
+    app.start();
+    Assert.assertTrue(app.isRunning());
+    Assert.assertFalse(config.isShutdownHook());
+  }
+  
+  @Test
   public void singleSupplierCallTest(){
     List<LifeCycle> createdLifecycles = new LinkedList<>();
     BootyConfig config = new BootyConfig();
@@ -59,14 +70,18 @@ public class TestMaBooty {
     LifeCycle app = Booty.build(config);
     app.start();
     Assert.assertTrue(app.isRunning());
+    app.stop();
+    Assert.assertFalse(app.isRunning());
   }
   
   @Test
   public void brokenLifecycleTest(){
     BootyConfig config = new BootyConfig();
-    config.setLifecycleSupplier(()->Collections.singletonList(new BrokenLifecycle()));
+    LifeCycle lc = new BrokenLifecycle();
+    config.setLifecycleSupplier(()->Collections.singletonList(lc));
     LifeCycle app = Booty.build(config);
     app.start();
+    Assert.assertFalse(lc.isRunning());
     Assert.assertFalse(app.isRunning());
   }
   
