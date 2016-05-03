@@ -1,6 +1,7 @@
 [![][maven img]][maven]
 [![][travis img]][travis]
 [![][codecov img]][codecov]
+[![][codacy img]][codacy]
 
 
 Booty leverages on the [LifeCycle](https://github.com/irenical/lifecycle) interface to define an application and handle it's bootstrap.
@@ -42,3 +43,5 @@ It is also possible to use Booty in a servlet container. To do so, it should be 
 [codecov]:https://codecov.io/gh/irenical/booty
 [codecov img]:https://codecov.io/gh/irenical/booty/branch/master/graph/badge.svg
 
+[codacy]:https://www.codacy.com/app/tiagosimao/booty?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=irenical/booty&amp;utm_campaign=Badge_Grade
+[codacy img]:https://api.codacy.com/project/badge/Grade/04363fe4528d49668ccf72379890c09c
