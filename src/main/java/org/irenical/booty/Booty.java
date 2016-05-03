@@ -1,7 +1,6 @@
 package org.irenical.booty;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 import org.irenical.lifecycle.LifeCycle;
 import org.irenical.lifecycle.builder.CompositeLifeCycle;
@@ -47,10 +46,7 @@ public class Booty extends CompositeLifeCycle {
       super.start();
     } catch (Exception e) {
       super.stop();
-      Consumer<Exception> onError = config.getOnError();
-      if (onError != null) {
-        onError.accept(e);
-      }
+      config.getOnError().accept(e);
     }
   }
 
