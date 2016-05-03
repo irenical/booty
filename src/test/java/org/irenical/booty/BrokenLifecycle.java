@@ -5,13 +5,13 @@ import org.irenical.lifecycle.LifeCycle;
 public class BrokenLifecycle implements LifeCycle {
 
   @Override
-  public void start() throws Exception {
-    throw new Exception("I blew up");
+  public void start() throws BlewUpException {
+    throw new BlewUpException("I blew up");
   }
 
   @Override
-  public void stop() throws Exception {
-    throw new Exception("I blew up even more");
+  public void stop() throws BlewUpException {
+    throw new BlewUpException("I blew up even more");
   }
 
   @Override
