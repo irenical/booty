@@ -45,8 +45,11 @@ public class Booty extends CompositeLifeCycle {
     try {
       super.start();
     } catch (Exception e) {
-      super.stop();
-      config.getOnError().accept(e);
+      try {
+        super.stop();
+      } finally {
+        config.getOnError().accept(e);
+      }
     }
   }
 
