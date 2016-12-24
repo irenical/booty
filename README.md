@@ -18,12 +18,12 @@ Each of your application's modules must somehow implement LifeCycle. This is the
 
 ```java
 public static void main(String[] args) {
-  LifeCycle loggingConfiguration = new MyLoggingConfiguration();
+  LifeCycle logging = new MyLogging();
   LifeCycle httpServer = new MyHTTPServer();
   LifeCycle dao = MyDatabaseAccess();
   
   BootyConfig config = new BootyConfig();
-  config.setLifecycleSupplier(()->Arrays.asList(loggingConfiguration,httpServer,dao));
+  config.setLifecycleSupplier(()->Arrays.asList(logging,httpServer,dao));
   Booty.build(config).start();
 }
 
