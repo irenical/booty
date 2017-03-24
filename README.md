@@ -3,8 +3,11 @@
 [![][codecov img]][codecov]
 [![][codacy img]][codacy]
 
-
+# Booty
 Booty leverages on the [LifeCycle](https://github.com/irenical/lifecycle) interface to define an application and handle it's bootstrap.
+
+![alt text][booty]  
+Please don't click on this
 
 A common application is made up of several modules, each either developed by you, your teammate, an open community, some big coorporation, etc... These modules are things like logging, database access, TPC listening and also etc...
 
@@ -33,6 +36,8 @@ public static void main(String[] args) {
 
 How the modules communicate with one another is outside of the scope of this project and should be solved by correcty modeling your application.  
 It is also possible to use Booty in a servlet container. To do so, it should be called in the application Context Listener.
+
+[booty]:https://www.irenical.org/booty/booty.png "One day this png will be replaced for a unicode character"
 
 [maven]:http://search.maven.org/#search|gav|1|g:"org.irenical.booty"%20AND%20a:"booty"
 [maven img]:https://maven-badges.herokuapp.com/maven-central/org.irenical.booty/booty/badge.svg
